@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-title">
+    <h2>Последние объявления</h2>
+</div>
+{% if current_user.is_authenticated %}
+<div class="add-button">
+    <a href="new_announce" class="btn btn-secondary">Опубликовать новое объявление</a>
+    <a href="user_address_anns" class="btn btn-success">Только мой город</a>
+</div>
+{% endif %}
+<section class="sale-zone" id="sale-zone">
+    <div class="container">
+        <div class="all-anns">
+            {% for i in range(len) %}
+            <div class="one-ann">
+                {% if announces[i].claim == 0 %}
+                <div class="change-btns">
+                    <a href="/claim/{{ announces[i].id }}" class="btn btn-danger">
+                        Пожаловаться
+                    </a>
+                </div>
+                {% else %}
+                <div class="change-btns">
+                    <a href="" class="btn btn-light" disabled>
+                        Пожаловаться
+                    </a>
+                </div>
+                {% endif %}
+                <div class="ann">
+                    <div class="about-ann">
+                        <div class="ann-title">{{announces[i].title}}</div>
+                        <div class="ann-fandom">{{announces[i].fandom}}</div>
+                        <div class="exchanges">
+                            {% if announces[i].exchange == 'exchange' %}
+                            <div class="exc-value">
+                                Обмен
+                            </div>
+                            {% elif announces[i].exchange == 'sale' %}
+                            <div class="exc-value">
+                                {{announces[i].cost}} руб.
+                            </div>
+                            {% elif announces[i].exchange == 'both' %}
+                            <div class="exc-value">
+                                Продажа/обмен
+                            </div>
+                            <div class="exc-cost">{{announces[i].cost}} руб.</div>
+                            {% endif %}
+                        </div>
+                        <div class="ann-seller">Продавец: {{announces[i].user.surname}} {{announces[i].user.name}}</div>
+                        <div class="ann-address">Город: {{announces[i].user.address}}</div>
+                        <div class="ann-contact">Тел. для связи: {{announces[i].user.phone}}</div>
+                        <div class="ann-content">{{announces[i].content}}</div>
+                    </div>
+                    <div class="ann-image">
+                        <img  src={{images_path[i]}} alt='Здесь должна быть картинка'>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
